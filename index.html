@@ -990,11 +990,11 @@
 
         /* ===== PROFILE ===== */
         .profile-cover {
-            height: 100px;
+            height: 140px;
             background: linear-gradient(135deg, var(--purple), var(--purple-dark), #764ba2);
             background-size: 200% 200%;
             animation: gradientShift 6s ease infinite;
-            border-radius: 0;
+            border-radius: 16px 16px 0 0;
             margin: -16px -16px 0;
             position: relative;
             cursor: pointer;
@@ -1002,49 +1002,59 @@
         }
         .profile-cover-overlay {
             position: absolute;
-            bottom: 8px;
-            right: 8px;
-            background: rgba(0,0,0,0.4);
+            bottom: 12px;
+            right: 12px;
+            background: rgba(0,0,0,0.5);
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             cursor: pointer;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all var(--transition);
+        }
+        .profile-cover-overlay:active {
+            transform: scale(0.9);
+            background: rgba(0,0,0,0.7);
         }
         .profile-avatar-container {
-            margin-top: -40px;
+            margin-top: -55px;
             text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             position: relative;
         }
         .avatar-xl {
-            width: 80px;
-            height: 80px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
-            font-size: 2.5rem;
+            font-size: 3rem;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto;
             background: linear-gradient(135deg, var(--purple), var(--purple-dark));
             color: white;
-            border: 3px solid var(--bg);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            border: 4px solid var(--bg);
+            box-shadow: 0 8px 32px rgba(139,92,246,0.3);
             overflow: hidden;
             position: relative;
             cursor: pointer;
+            transition: all var(--transition);
+        }
+        .avatar-xl:active {
+            transform: scale(0.95);
         }
         .avatar-xl.online::after {
             content: '';
             position: absolute;
-            bottom: 4px;
-            right: 4px;
-            width: 16px;
-            height: 16px;
+            bottom: 6px;
+            right: 6px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             background: var(--green);
             border: 3px solid var(--bg);
@@ -1052,14 +1062,14 @@
         }
         .profile-avatar-edit {
             position: absolute;
-            bottom: 0;
+            bottom: 5px;
             left: 50%;
             transform: translateX(-50%);
-            margin-left: 35px;
+            margin-left: 45px;
             background: var(--bg);
             border-radius: 50%;
-            width: 26px;
-            height: 26px;
+            width: 34px;
+            height: 34px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1067,6 +1077,13 @@
             border: 2px solid var(--border);
             color: var(--text2);
             z-index: 5;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition);
+        }
+        .profile-avatar-edit:active {
+            background: var(--purple);
+            color: white;
+            border-color: var(--purple);
         }
         .avatar-img {
             width: 100%;
@@ -1074,34 +1091,47 @@
             border-radius: 50%;
             object-fit: cover;
         }
+        .avatar-img-cover {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
         .stats-row {
             display: flex;
             justify-content: space-around;
-            margin: 12px 0;
-            padding: 10px;
+            margin: 16px 0;
+            padding: 14px;
             background: var(--bg2);
-            border-radius: 14px;
+            border-radius: 16px;
         }
         .stat-item {
             text-align: center;
             cursor: pointer;
+            transition: all var(--transition);
+        }
+        .stat-item:active {
+            transform: scale(0.95);
         }
         .stat-value {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 800;
+            color: var(--purple);
         }
         .stat-label {
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             color: var(--text2);
-            margin-top: 1px;
+            margin-top: 2px;
+            font-weight: 600;
         }
         .action-row {
             display: flex;
-            gap: 6px;
-            margin-top: 10px;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
         }
         .action-row .btn {
             flex: 1;
+            min-width: 0;
         }
 
         /* ===== THEME SELECTOR ===== */
@@ -1262,7 +1292,7 @@
             font-size: 0.8rem;
         }
 
-        /* ===== BOTTOM NAV (NEW) ===== */
+        /* ===== BOTTOM NAV ===== */
         .bottom-nav {
             display: flex;
             justify-content: space-around;
@@ -1318,31 +1348,26 @@
             animation: pulse 2s infinite;
         }
 
-        /* ===== LOGOUT SECTION IN CHAT LIST ===== */
-        .logout-section {
-            padding: 8px 6px 12px;
-            border-top: 1px solid var(--border);
-            margin-top: auto;
-            flex-shrink: 0;
-        }
-        .logout-section .logout-btn {
+        /* ===== LOGOUT BUTTON IN SETTINGS ===== */
+        .logout-settings-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border-radius: 14px;
             background: rgba(255,68,68,0.08);
             border: 1px solid rgba(255,68,68,0.2);
             color: var(--red);
             font-weight: 600;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             transition: all var(--transition);
             touch-action: manipulation;
+            margin-top: 16px;
         }
-        .logout-section .logout-btn:active {
+        .logout-settings-btn:active {
             background: rgba(255,68,68,0.2);
             transform: scale(0.97);
         }
@@ -1425,6 +1450,17 @@
             .bottom-nav-btn i {
                 font-size: 1rem;
             }
+            .profile-cover {
+                height: 120px;
+            }
+            .avatar-xl {
+                width: 90px;
+                height: 90px;
+                font-size: 2.5rem;
+            }
+            .profile-avatar-container {
+                margin-top: -45px;
+            }
         }
     </style>
 </head>
@@ -1451,7 +1487,7 @@
     <script>
         (function() {
             // ==================== КОНСТАНТЫ ====================
-            const STORAGE_KEY = 'kchat_mobile_v4';
+            const STORAGE_KEY = 'kchat_mobile_v5';
             const DEMO_PASSWORD = '12345';
 
             // ==================== СОСТОЯНИЕ ====================
@@ -1492,7 +1528,7 @@
                     }
                 },
                 showChatList: true,
-                activeTab: 'chats' // 'chats' | 'profile' | 'settings'
+                activeTab: 'chats'
             };
 
             // ==================== СИСТЕМА STREAKS ====================
@@ -1761,7 +1797,6 @@
                     }
                 };
 
-                // Демо-стрики
                 state.streaks = {
                     'alex_dev_kchat_bot': { days: 5, lastDate: getCurrentDateKey(), active: true },
                     'alex_dev_maria_design': { days: 12, lastDate: getCurrentDateKey(), active: true },
@@ -1769,7 +1804,6 @@
                     'maria_design_dmitry_code': { days: 28, lastDate: getCurrentDateKey(), active: true }
                 };
 
-                // Демо-реакции
                 state.reactions = {
                     'm3': { '👍': 1, '❤️': 1 },
                     'm5': { '🔥': 2 }
@@ -2116,11 +2150,6 @@
                         </button>
                     </div>
                     <div class="chat-list-scroll" id="chatListScroll"></div>
-                    <div class="logout-section">
-                        <button class="logout-btn" id="logoutBtnBottom">
-                            <i class="fas fa-sign-out-alt"></i> Выйти из аккаунта
-                        </button>
-                    </div>
                 </div>`;
 
                 const chatScreenHTML = `
@@ -2163,7 +2192,6 @@
                     </div>
                 </div>`;
 
-                // Нижняя навигация
                 const bottomNavHTML = `
                 <div class="bottom-nav" id="bottomNav" style="${!state.showChatList ? 'display:none;' : ''}">
                     <button class="bottom-nav-btn ${state.activeTab === 'chats' ? 'active' : ''}" data-tab="chats">
@@ -2226,7 +2254,6 @@
             }
 
             function attachMainEvents() {
-                // Навигация
                 document.getElementById('backToChatListBtn')?.addEventListener('click', () => {
                     state.showChatList = true;
                     state.currentChat = null;
@@ -2241,7 +2268,6 @@
                     updateBottomNav();
                 });
 
-                // Нижняя навигация
                 document.querySelectorAll('.bottom-nav-btn').forEach(btn => {
                     btn.addEventListener('click', () => switchTab(btn.dataset.tab));
                 });
@@ -2252,24 +2278,6 @@
 
                 document.getElementById('createChatBtn')?.addEventListener('click', () => showCreateModal());
 
-                // Выход из аккаунта (нижняя кнопка)
-                document.getElementById('logoutBtnBottom')?.addEventListener('click', () => {
-                    if (state.currentCall) endCall();
-                    if (confirm('Выйти из аккаунта?')) {
-                        if (state.currentUser) {
-                            state.currentUser.online = false;
-                            state.currentUser.lastSeen = Date.now();
-                        }
-                        state.currentUser = null;
-                        state.currentChat = null;
-                        state.showChatList = true;
-                        state.activeTab = 'chats';
-                        saveState();
-                        render();
-                    }
-                });
-
-                // Поиск чатов
                 document.getElementById('searchChats')?.addEventListener('input', function() {
                     const q = this.value.toLowerCase();
                     document.querySelectorAll('#chatListScroll .chat-item').forEach(item => {
@@ -2279,16 +2287,12 @@
                     });
                 });
 
-                // Заголовок чата
                 document.getElementById('chatInfoHeader')?.addEventListener('click', showChatInfoModal);
 
-                // Звонок
                 document.getElementById('callBtn')?.addEventListener('click', () => startCall(false));
 
-                // Меню чата
                 document.getElementById('chatMenuBtn')?.addEventListener('click', showChatMenuModal);
 
-                // Тема
                 document.getElementById('themeToggleBtn')?.addEventListener('click', () => {
                     state.theme = state.theme === 'dark' ? 'white' : 'dark';
                     state.settings.appearance.theme = state.theme;
@@ -2300,7 +2304,6 @@
                     }
                 });
 
-                // Отправка сообщения
                 const sendMsg = () => {
                     const input = document.getElementById('messageInput');
                     if (!input) return;
@@ -2386,7 +2389,6 @@
                     }
                 });
 
-                // Эмодзи панель
                 const emojis = ['😀', '😂', '🤣', '😊', '😍', '🥰', '😘', '😋', '🤪', '😎', '🤓', '😢', '😭', '😤',
                     '😡', '👍', '👎', '👏', '🙌', '💪', '❤️', '🔥', '⭐', '✅', '❌', '🎉', '🎊', '🌈', '🍕', '☕', '🚀',
                     '💯'
@@ -2431,7 +2433,6 @@
                     });
                 });
 
-                // Прикрепление файла
                 document.getElementById('attachBtn')?.addEventListener('click', () => {
                     document.getElementById('fileInput')?.click();
                 });
@@ -2506,8 +2507,9 @@
                 const reader = new FileReader();
                 reader.onload = (ev) => {
                     state.currentUser.customAvatar = ev.target.result;
-                    if (state.users[state.currentUser.id]) state.users[state.currentUser.id].customAvatar = ev.target
-                        .result;
+                    if (state.users[state.currentUser.id]) {
+                        state.users[state.currentUser.id].customAvatar = ev.target.result;
+                    }
                     saveState();
                     render();
                     closeAllModals();
@@ -2523,11 +2525,20 @@
                 const reader = new FileReader();
                 reader.onload = (ev) => {
                     state.currentUser.coverImage = ev.target.result;
-                    if (state.users[state.currentUser.id]) state.users[state.currentUser.id].coverImage = ev.target
-                        .result;
+                    if (state.users[state.currentUser.id]) {
+                        state.users[state.currentUser.id].coverImage = ev.target.result;
+                    }
                     saveState();
                     closeAllModals();
                     showToast('Обложка обновлена!', 'success');
+                    // Обновляем модальное окно если открыто
+                    if (state.currentUser) {
+                        const modalOverlays = document.querySelectorAll('.modal-overlay');
+                        if (modalOverlays.length > 0) {
+                            closeAllModals();
+                            setTimeout(() => showUserProfile(state.currentUser.id, 'profile'), 300);
+                        }
+                    }
                 };
                 reader.readAsDataURL(file);
                 e.target.value = '';
@@ -3051,12 +3062,14 @@
                          ${isOwn ? `onclick="document.getElementById('avatarInput').click()"` : ''}>
                         ${user.customAvatar ? `<img src="${user.customAvatar}" class="avatar-img">` : user.avatar}
                     </div>
-                    ${isOwn ? `<div class="profile-avatar-edit" onclick="document.getElementById('avatarInput').click()"><i class="fas fa-camera" style="font-size:0.6rem;"></i></div>` : ''}
+                    ${isOwn ? `<div class="profile-avatar-edit" onclick="event.stopPropagation();document.getElementById('avatarInput').click()"><i class="fas fa-camera"></i></div>` : ''}
                 </div>
                 <div style="text-align:center;">
-                    <h2>${escapeHTML(user.name)}</h2>
-                    <p style="color:var(--purple);font-size:0.85rem;">@${user.username || 'нет'} • ${user.id}</p>
-                    ${user.bio ? `<p style="color:var(--text2);font-size:0.8rem;margin-top:2px;">${escapeHTML(user.bio)}</p>` : ''}
+                    <h2 style="font-size:1.3rem;font-weight:700;">${escapeHTML(user.name)}</h2>
+                    <p style="color:var(--purple);font-size:0.9rem;font-weight:600;">@${user.username || 'нет'}</p>
+                    <p style="color:var(--text2);font-size:0.75rem;">ID: ${user.id}</p>
+                    ${user.bio ? `<p style="color:var(--text2);font-size:0.85rem;margin-top:4px;font-style:italic;">${escapeHTML(user.bio)}</p>` : ''}
+                    ${user.status ? `<p style="color:var(--text2);font-size:0.8rem;margin-top:2px;">${escapeHTML(user.status)}</p>` : ''}
                 </div>
                 <div class="stats-row">
                     <div class="stat-item">
@@ -3143,6 +3156,10 @@
                             <button class="theme-btn ${state.theme === 'dark' ? 'active' : ''}" data-theme="dark">🌙 Тёмная</button>
                         </div>
                         <button class="btn btn-primary" style="margin-top:12px;" id="saveSettingsBtn">💾 Сохранить настройки</button>
+                        
+                        <button class="logout-settings-btn" id="logoutSettingsBtn">
+                            <i class="fas fa-sign-out-alt"></i> Выйти из аккаунта
+                        </button>
                     </div>`;
                 } else {
                     fullContent = profileHeaderHTML + actionsHTML;
@@ -3190,7 +3207,26 @@
                         saveState();
                         applyFontSize();
                         closeModal();
+                        render();
                         showToast('Настройки сохранены!', 'success');
+                    });
+
+                    // Кнопка выхода в настройках
+                    overlay.querySelector('#logoutSettingsBtn')?.addEventListener('click', () => {
+                        closeModal();
+                        if (state.currentCall) endCall();
+                        if (confirm('Выйти из аккаунта?')) {
+                            if (state.currentUser) {
+                                state.currentUser.online = false;
+                                state.currentUser.lastSeen = Date.now();
+                            }
+                            state.currentUser = null;
+                            state.currentChat = null;
+                            state.showChatList = true;
+                            state.activeTab = 'chats';
+                            saveState();
+                            render();
+                        }
                     });
                 }
 
@@ -3243,30 +3279,47 @@
 
                 const content = `
                 <div class="input-group">
-                    <label>Имя</label>
-                    <input type="text" id="editName" value="${escapeHTML(u.name)}">
+                    <label>👤 Имя</label>
+                    <input type="text" id="editName" value="${escapeHTML(u.name)}" placeholder="Ваше имя">
                 </div>
                 <div class="input-group">
-                    <label>Username</label>
-                    <input type="text" id="editUsername" value="${u.username || ''}">
+                    <label>🆔 Username</label>
+                    <input type="text" id="editUsername" value="${u.username || ''}" placeholder="username">
                 </div>
                 <div class="input-group">
-                    <label>Статус</label>
-                    <input type="text" id="editStatus" value="${escapeHTML(u.status || '')}">
+                    <label>💬 Статус</label>
+                    <input type="text" id="editStatus" value="${escapeHTML(u.status || '')}" placeholder="Ваш статус">
                 </div>
                 <div class="input-group">
-                    <label>О себе</label>
-                    <textarea id="editBio" rows="3">${escapeHTML(u.bio || '')}</textarea>
+                    <label>📝 О себе</label>
+                    <textarea id="editBio" rows="3" placeholder="Расскажите о себе">${escapeHTML(u.bio || '')}</textarea>
                 </div>
-                <button class="btn btn-primary" id="saveProfileBtn">Сохранить</button>`;
+                <button class="btn btn-primary" id="saveProfileBtn">💾 Сохранить изменения</button>`;
 
                 const { overlay, closeModal } = showModal('✏️ Редактирование профиля', content);
 
                 overlay.querySelector('#saveProfileBtn').addEventListener('click', () => {
-                    u.name = overlay.querySelector('#editName').value.trim() || u.name;
-                    u.username = overlay.querySelector('#editUsername').value.trim() || u.username;
-                    u.status = overlay.querySelector('#editStatus').value.trim();
-                    u.bio = overlay.querySelector('#editBio').value.trim();
+                    const newName = overlay.querySelector('#editName').value.trim();
+                    const newUsername = overlay.querySelector('#editUsername').value.trim();
+                    const newStatus = overlay.querySelector('#editStatus').value.trim();
+                    const newBio = overlay.querySelector('#editBio').value.trim();
+
+                    if (!newName) return showToast('Имя не может быть пустым', 'error');
+
+                    // Обновляем currentUser
+                    state.currentUser.name = newName;
+                    state.currentUser.username = newUsername || state.currentUser.username;
+                    state.currentUser.status = newStatus;
+                    state.currentUser.bio = newBio;
+
+                    // Обновляем в users
+                    if (state.users[state.currentUser.id]) {
+                        state.users[state.currentUser.id].name = newName;
+                        state.users[state.currentUser.id].username = newUsername || state.users[state.currentUser.id].username;
+                        state.users[state.currentUser.id].status = newStatus;
+                        state.users[state.currentUser.id].bio = newBio;
+                    }
+
                     saveState();
                     closeModal();
                     render();
@@ -3478,9 +3531,10 @@
             window.endCall = endCall;
             window.addReaction = addReaction;
 
-            console.log('✅ KChat Pro Mobile v4 загружен!');
-            console.log('📱 Исправлена кнопка выхода — теперь внизу списка чатов');
-            console.log('👤 Профиль и Настройки разделены — нижняя панель навигации');
+            console.log('✅ KChat Pro Mobile v5 загружен!');
+            console.log('👤 Кнопка выхода перенесена в Настройки');
+            console.log('✨ Изменение имени и профиля работает корректно');
+            console.log('🖼️ Аватар и обложка увеличены и стали красивее');
         })();
     </script>
 </body>
