@@ -1574,7 +1574,7 @@
     <script>
         (function() {
             // ==================== КОНСТАНТЫ ====================
-            const STORAGE_KEY = 'kchat_mobile_v8';
+            const STORAGE_KEY = 'kchat_mobile_v9';
             const DEMO_PASSWORD = '12345';
             const LONG_PRESS_DURATION = 500;
 
@@ -1925,7 +1925,7 @@
                         { id: 'm7', sender: 'dmitry_code', text: 'Буду вовремя! Подготовил бэкенд ✅', time: now - 86000000, type: 'text', deleted: false }
                     ],
                     'c4': [
-                        { id: 'm8', sender: 'alex_dev', text: '🔥 KChat Pro v8! Контекстное меню по долгому нажатию!', time: now - 172800000, type: 'text', deleted: false }
+                        { id: 'm8', sender: 'alex_dev', text: '🔥 KChat Pro v9! Поиск по ID, контекстное меню!', time: now - 172800000, type: 'text', deleted: false }
                     ]
                 };
 
@@ -2191,7 +2191,7 @@
                         </div>
                         <div class="chat-list-search">
                             <i class="fas fa-search" style="color:var(--text2);font-size:0.8rem;flex-shrink:0;"></i>
-                            <input type="text" id="searchChats" placeholder="Поиск чатов..." autocomplete="off">
+                            <input type="text" id="searchChats" placeholder="Поиск чатов или ID..." autocomplete="off">
                         </div>
                         <button class="icon-btn" id="createChatBtn" title="Новый чат"><i class="fas fa-pen"></i></button>
                     </div>
@@ -2457,6 +2457,41 @@
                 document.getElementById('fileInput')?.addEventListener('change', handleFileUpload);
                 document.getElementById('avatarInput')?.addEventListener('change', handleAvatarUpload);
                 document.getElementById('coverInput')?.addEventListener('change', handleCoverUpload);
+
+                // ===== ПОИСК ПО ID (НАЖАТИЕ ENTER В ПОИСКЕ ЧАТОВ) =====
+                document.getElementById('searchChats')?.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        const query = this.value.trim().toLowerCase();
+                        if (!query || query.length < 3) return;
+
+                        // Ищем среди существующих чатов
+                        const existingChat = state.chats.find(function(c) {
+                            const display = getChatDisplay(c, state.currentUser.id);
+                            return display.name.toLowerCase().includes(query) ||
+                                   (display.username && display.username.toLowerCase() === query);
+                        });
+
+                        if (existingChat) {
+                            openChat(existingChat.id);
+                            return;
+                        }
+
+                        // Ищем пользователя по ID
+                        const user = Object.values(state.users).find(function(u) {
+                            return u.id === query || u.username === query;
+                        });
+
+                        if (user && user.id !== state.currentUser.id) {
+                            showToast('Пользователь @' + user.username + ' найден!', 'success');
+                            showUserProfile(user.id);
+                        } else if (user && user.id === state.currentUser.id) {
+                            showToast('Это ваш профиль', 'info');
+                            showUserProfile(user.id);
+                        } else {
+                            showToast('Пользователь не найден. Введите точный ID.', 'warning');
+                        }
+                    }
+                });
             }
 
             // ==================== АВТООТВЕТЫ ====================
@@ -2711,7 +2746,6 @@
                     </div>`;
                 }).join('');
 
-                // Обработчики: тап — открыть, долгое нажатие — контекстное меню
                 container.querySelectorAll('.chat-item').forEach(function(item) {
                     item.addEventListener('click', function(e) {
                         if (!state.longPressFired) {
@@ -2797,7 +2831,6 @@
                     </div>`;
                 }).join('');
 
-                // Долгое нажатие на сообщения
                 container.querySelectorAll('.msg').forEach(function(msgEl) {
                     addLongPress(msgEl, function() {
                         const msgId = msgEl.dataset.msg;
@@ -3036,7 +3069,6 @@
                     if (timer) clearTimeout(timer);
                 });
 
-                // ПКМ для десктопа
                 element.addEventListener('contextmenu', function(e) {
                     e.preventDefault();
                     callback();
@@ -3570,11 +3602,9 @@
             window.endCall = endCall;
             window.addReaction = addReaction;
 
-            console.log('✅ KChat Pro v8 загружен!');
-            console.log('🖱️ Контекстное меню по долгому нажатию (500ms)');
-            console.log('💬 Меню для сообщений: Копировать, Ответить, Реакции, Удалить');
-            console.log('📋 Меню для чатов: Закрепить, Уведомления, Инфо, Очистить, Удалить');
-            console.log('🎨 Панель выбора реакций с 10 эмодзи');
+            console.log('✅ KChat Pro v9 загружен!');
+            console.log('🔍 Поиск по ID: введи username в поиске чатов и нажми Enter');
+            console.log('🖱️ Контекстное меню по долгому нажатию');
         })();
     </script>
 </body>
