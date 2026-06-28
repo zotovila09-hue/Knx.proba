@@ -3607,5 +3607,42 @@
             console.log('🖱️ Контекстное меню по долгому нажатию');
         })();
     </script>
+    <script>
+function findChatById() {
+    // 1. Берем ID, который ты ввел в поле ввода
+    const searchId = document.getElementById('searchIdInput').value;
+    const resultArea = document.getElementById('searchResultArea');
+    
+    if (!searchId) {
+        alert("Введи ID чата!");
+        return;
+    }
+
+    resultArea.innerHTML = '<p>Ищу чат...</p>';
+
+    // 2. Стучимся на твой компьютер по Wi-Fi
+    fetch(`http://192.168.0.17:5000/get_chat?id=${searchId}`)
+    .then(response => response.json())
+    .then(data => {
+        resultArea.innerHTML = ''; // Очищаем надпись "Ищу..."
+        
+        if (data.error) {
+            // Если сервер ответил, что чата нет
+            resultArea.insertAdjacentHTML('beforeend', `<p style="color: red;">${data.error}</p>`);
+        } else {
+            // Если сервер нашел чат и прислал имя
+            const chatHTML = `<div style="padding: 10px; background: #e2f0d9; border-radius: 8px; margin-top: 10px;">
+                Найдено: <b>${data.chatName}</b>
+            </div>`;
+            resultArea.insertAdjacentHTML('beforeend', chatHTML);
+        }
+    })
+    .catch(err => {
+        // Если телефон вообще не смог достучаться до компа
+        resultArea.innerHTML = '<p style="color: red;">Ошибка сети! Проверь, что сервер на ПК запущен и Wi-Fi один и тот же.</p>';
+        console.error(err);
+    });
+}
+</script>
 </body>
 </html>
