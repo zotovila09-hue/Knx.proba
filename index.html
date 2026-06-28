@@ -3608,8 +3608,9 @@
         })();
     </script>
     <script>
+let currentChatId = ""; // Тут будем хранить активный ID чата
+
 function findChatById() {
-    // 1. Берем ID, который ты ввел в поле ввода
     const searchId = document.getElementById('searchIdInput').value;
     const resultArea = document.getElementById('searchResultArea');
     
@@ -3618,30 +3619,81 @@ function findChatById() {
         return;
     }
 
-    resultArea.innerHTML = '<p>Ищу чат...</p>';
+    currentChatId = searchId; // Запоминаем ID комнаты
+    resultArea.innerHTML = '<p>Подключение к комнате...</p>';
 
-    // 2. Стучимся на твой компьютер по Wi-Fi
+    // Стучимся к серверу на комп за сообщениями
     fetch(`http://192.168.0.17:5000/get_chat?id=${searchId}`)
     .then(response => response.json())
     .then(data => {
-        resultArea.innerHTML = ''; // Очищаем надпись "Ищу..."
+        resultArea.innerHTML = ''; // Очищаем
         
-        if (data.error) {
-            // Если сервер ответил, что чата нет
-            resultArea.insertAdjacentHTML('beforeend', `<p style="color: red;">${data.error}</p>`);
-        } else {
-            // Если сервер нашел чат и прислал имя
-            const chatHTML = `<div style="padding: 10px; background: #e2f0d9; border-radius: 8px; margin-top: 10px;">
-                Найдено: <b>${data.chatName}</b>
-            </div>`;
-            resultArea.insertAdjacentHTML('beforeend', chatHTML);
+        // Создаем интерфейс чата: имя, окно сообщений и поле ввода с кнопкой
+        const chatInterface = `
+            <div style="padding: 15px; background: #1e1e1e; border: 1px solid #333; border-radius: 12px; margin-top: 15px; color: white; text-align: left;">
+                <h3 style="margin-top:0; color: #ff4545;">${data.chatName}</h3>
+                
+                <div id="chatMessagesBox" style="height: 200px; overflow-y: auto; background: #121212; border: 1px solid #222; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                    ${data.messages.length === 0 ? '<p style="color: #666;">В этом чате еще нет сообщений. Напиши первое!</p>' : ''}
+                </div>
+                
+                <div style="display: flex; gap: 5px;">
+                    <input type="text" id="msgInput" placeholder="Введите сообщение..." style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #444; background: #252525; color: white;">
+                    <button onclick="sendMessageToServer()" style="padding: 8px 15px; background: #ff4545; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">Отправить</button>
+                </div>
+            </div>
+        `;
+        
+        resultArea.insertAdjacentHTML('beforeend', chatInterface);
+        
+        // Если сообщения были, выводим их
+        if (data.messages.length > 0) {
+            const box = document.getElementById('chatMessagesBox');
+            data.messages.forEach(msg => {
+                box.insertAdjacentHTML('beforeend', `<div style="background: #2d2d2d; padding: 6px 10px; border-radius: 6px; margin-bottom: 5px; word-break: break-all;">${msg}</div>`);
+            });
+            box.scrollTop = box.scrollHeight; // Скролл вниз
         }
     })
     .catch(err => {
-        // Если телефон вообще не смог достучаться до компа
         resultArea.innerHTML = '<p style="color: red;">Ошибка сети! Проверь, что сервер на ПК запущен и Wi-Fi один и тот же.</p>';
         console.error(err);
     });
+}
+
+function sendMessageToServer() {
+    const text = document.getElementById('msgInput').value;
+    if (!text) return;
+
+    // Отправляем текст на наш ПК-сервер через POST-запрос
+    fetch('http://192.168.0.17:5000/send_message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: json.dumps({ id: currentChatId, text: text }) // Исправление синтаксиса для JS:
+    })
+    // Ой, маленькая поправка, в JS пишется JSON.stringify вместо json.dumps:
+    fetch('http://192.168.0.17:5000/send_message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: currentChatId, text: text })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'ok') {
+            // Добавляем сообщение на экран мгновенно
+            const box = document.getElementById('chatMessagesBox');
+            // Если там была надпись "нет сообщений", убираем её при первом сообщении
+            if (box.innerHTML.includes('В этом чате еще нет сообщений')) box.innerHTML = '';
+            
+            box.insertAdjacentHTML('beforeend', `<div style="background: #ff4545; color: white; padding: 6px 10px; border-radius: 6px; margin-bottom: 5px; text-align: right; margin-left: 20%; word-break: break-all;">${text}</div>`);
+            document.getElementById('msgInput').value = ''; // Очищаем поле ввода
+            box.scrollTop = box
+
+
+ight; // Скролл вниз
+        }
+    })
+    .catch(err => alert('Не удалось отправить сообщение!'));
 }
 </script>
 </body>
